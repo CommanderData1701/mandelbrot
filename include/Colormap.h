@@ -11,6 +11,7 @@
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/value.h>
 #include <fstream>
+#include <sstream>
 
 class Colormap {
 public:
@@ -19,6 +20,8 @@ public:
     void init(std::string style);
 
     std::array<int, 3> plot(int val, int max);
+
+    std::array<int, 3> Black_White(int val, int max);
 
 private:
     std::vector<int> R;

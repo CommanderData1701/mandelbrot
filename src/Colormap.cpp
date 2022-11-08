@@ -21,9 +21,19 @@ void Colormap::init(std::string style) {
     for(int i=0; i<100; i++) {
         float percent = i/100.;
 
-        R.push_back(config["R"][std::to_string(percent)].asInt());
-        G.push_back(config["G"][std::to_string(percent)].asInt());
-        B.push_back(config["B"][std::to_string(percent)].asInt());
+        std::ostringstream dummy;
+        if(i%10 != 0) {
+            dummy.precision(2);
+        }else{
+            dummy.precision(1);
+        }
+
+        dummy << std::fixed << percent;
+        std::string index = dummy.str();
+
+        R.push_back(config["R"][index].asInt());
+        G.push_back(config["G"][index].asInt());
+        B.push_back(config["B"][index].asInt());
     }
 }
 
@@ -43,6 +53,19 @@ std::array<int, 3> Colormap::plot(int val, int max) {
     res[0] = R[index];
     res[1] = G[index];
     res[2] = B[index];
+
+    return res;
+}
+
+
+std::array<int, 3> Colormap::Black_White(int val, int max) {
+    float factor = 1. * val/max;
+
+    std::array<int, 3> res;
+
+    res[0] = factor*255;
+    res[1] = factor*255;
+    res[2] = factor*255;
 
     return res;
 }

@@ -2,17 +2,18 @@
 #include "include/Client.h"
 #include <time.h>
 #include <iomanip>
+#include "include/Colormap.h"
 
 int main() {
-    // Client client;
+    Client client;
 
-    // while(client.running()) {
-    //     client.handleEvents();
-    //     client.update();
-    //     client.render();
-    // }
+    while(client.running()) {
+        client.handleEvents();
+        client.update();
+        client.render();
+    }
 
-    // client.close();
+    client.close();
 
     return 0;
 }
