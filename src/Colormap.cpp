@@ -40,7 +40,7 @@ void Colormap::init(std::string style) {
 
 std::array<int, 3> Colormap::plot(int val, int max) {
     std::array<int, 3> res;
-    float percent = 1.*val/max;
+    float percent = 1.*log(val + 1)/log(max + 1);
 
     int index;
 

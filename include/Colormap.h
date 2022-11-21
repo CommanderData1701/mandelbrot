@@ -12,6 +12,7 @@
 #include <jsoncpp/json/value.h>
 #include <fstream>
 #include <sstream>
+#include <math.h>
 
 class Colormap {
 public:

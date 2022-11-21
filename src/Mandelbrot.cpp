@@ -37,6 +37,7 @@ void Mandelbrot::update(Complex center, double re_width, double im_width, int ma
     double re_step = re_width/width;
     double im_step = im_width/height;
 
+
     for(int y=0; y<height; y++) {
         double current_re = center.Re() - re_width/2.;
         for(int x=0; x<width; x++) {
