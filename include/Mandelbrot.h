@@ -7,6 +7,7 @@
 
 
 #include <vector>
+#include <future>
 #include "Complex.h"
 
 class Mandelbrot {

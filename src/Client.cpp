@@ -19,10 +19,10 @@ Client::Client() {
 
     this->height = config["height"].asInt();
     this->width = config["width"].asInt();
-    this->mouse_sensitivity = config["mouse_sensitivity"].asFloat();
     this->scroll_sensitivity = config["scroll_sensitivity"].asFloat();
 
     this->mapper.init(style);
+    this->zoom = .5;
 
     center.set(.0, .0);
     re_width = 2.; im_width=2.;
@@ -30,7 +30,7 @@ Client::Client() {
     re_width *= aspect_ratio;
     im_width /= aspect_ratio;
 
-    max_iter = 1000;
+    max_iter = 500;
     max_val = 1000.;
 
     mandelbrot.init(height, width);
@@ -55,11 +55,36 @@ void Client::handleEvents() {
 
     SDL_PollEvent(&event);
 
+    if((this->buttons & SDL_BUTTON_LMASK) != 0) {
+        int dx = mouse_x - width/2;
+        int dy = mouse_y - height/2;
+
+        double re = center.Re() + 1.*dx/width*re_width;
+        double im = center.Im() + 1.*dy/height*im_width;
+
+        Complex new_center(re, im);
+        this->center = new_center;
+
+        im_width *= zoom;
+        re_width *= zoom;
+
+        zoom = .5;
+        has_changed = true;
+    }
+
     switch (event.type) {
         case SDL_QUIT:
             isRunning = false;
 
+
+        case SDL_MOUSEWHEEL:
+            if (event.wheel.y > 0) {
+                zoom -= scroll_sensitivity/100.;
+            } else if (event.wheel.y < 0) {
+                zoom += scroll_sensitivity/100.;
+            }
     }
+
 }
 
 
@@ -69,11 +94,13 @@ bool Client::running() {
 
 
 void Client::update() {
+    this->buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
+
     if(this->has_changed) {
-        mandelbrot.update(center, re_width, im_width, max_iter, max_val);
+        this->mandelbrot.update(center, re_width, im_width, max_iter, max_val);
     }
 
-    has_changed = false;
+    this->has_changed = false;
 }
 
 
@@ -92,14 +119,22 @@ void Client::render() {
         }
     }
 
-    SDL_RenderPresent(renderer);
+    this->focus.w = width * zoom;
+    this->focus.h = height * zoom;
+    this->focus.x = mouse_x - this->focus.w/2;
+    this->focus.y = mouse_y - this->focus.h/2;
+
+    SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
+    SDL_RenderDrawRect(this->renderer, &this->focus);
+
+    SDL_RenderPresent(this->renderer);
 }
 
 
 void Client::close() {
     std::cout << "Quitting SDL2..." << '\n';
-    SDL_DestroyWindow(window);
-    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(this->window);
+    SDL_DestroyRenderer(this->renderer);
 
     SDL_Quit();
     std::cout << "Successfully quit SDL2!" << '\n';

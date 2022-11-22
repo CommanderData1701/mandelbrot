@@ -13,6 +13,7 @@
 #include <vector>
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/value.h>
+#include <future>
 
 
 class Client {
@@ -32,7 +33,7 @@ private:
     SDL_Renderer* renderer;
 
     int width, height;
-    float mouse_sensitivity, scroll_sensitivity;
+    float scroll_sensitivity;
 
     float re_width, im_width;
     Complex center;
@@ -41,6 +42,12 @@ private:
     int max_iter;
     float max_val;
     bool has_changed;
+
+    int mouse_x, mouse_y;
+    float zoom;
+
+    SDL_Rect focus;
+    Uint32 buttons;
 
     Colormap mapper;
 

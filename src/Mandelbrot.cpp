@@ -27,6 +27,7 @@ void Mandelbrot::init(int height, int width) {
 
 
 void Mandelbrot::update(Complex center, double re_width, double im_width, int max_iter, double max_val) {
+    std::cout << "Processing...\n";
     this->center = center;
     this->re_width = re_width;
     this->im_width = im_width;
@@ -48,6 +49,8 @@ void Mandelbrot::update(Complex center, double re_width, double im_width, int ma
         }
         current_im += im_step;
     }
+
+    std::cout << "Done!\n";
 
 }
 
